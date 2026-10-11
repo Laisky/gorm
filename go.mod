@@ -1,6 +1,8 @@
 module github.com/Laisky/gorm
 
-go 1.12
+go 1.26.0
+
+toolchain go1.26.9
 
 require (
 	github.com/denisenkom/go-mssqldb v0.0.0-20191124224453-732737034ffd
@@ -10,5 +12,9 @@ require (
 	github.com/jinzhu/now v1.0.1
 	github.com/lib/pq v1.1.1
 	github.com/mattn/go-sqlite3 v1.14.0
-	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd // indirect
+)
+
+require (
+	github.com/golang-sql/civil v0.0.0-20190719163853-cb61b32ac6fe // indirect
+	golang.org/x/crypto v0.57.0 // indirect
 )
