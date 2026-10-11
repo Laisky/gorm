@@ -81,7 +81,7 @@ func LogFormatter(values ...interface{}) (messages []interface{}) {
 					case string:
 						formattedValues = append(formattedValues, fmt.Sprintf("'%v'", value))
 					default:
-						formattedValues = append(formattedValues, fmt.Sprintf("'%v'", value))
+						formattedValues = append(formattedValues, "'"+safeLogValue(value)+"'")
 					}
 				} else {
 					formattedValues = append(formattedValues, "NULL")
@@ -115,6 +115,25 @@ func LogFormatter(values ...interface{}) (messages []interface{}) {
 	}
 
 	return
+}
+
+// safeLogValue preserves ordinary Stringer behavior without letting a broken
+// String method replace the logged value with fmt's panic diagnostic.
+func safeLogValue(value interface{}) (formatted string) {
+	if stringer, ok := value.(fmt.Stringer); ok {
+		defer func() {
+			if recover() != nil {
+				underlying := reflect.ValueOf(value)
+				if underlying.Kind() == reflect.String {
+					formatted = underlying.String()
+				} else {
+					formatted = fmt.Sprintf("<%T>", value)
+				}
+			}
+		}()
+		return stringer.String()
+	}
+	return fmt.Sprint(value)
 }
 
 type logger interface {

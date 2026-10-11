@@ -566,7 +566,7 @@ func TestCount(t *testing.T) {
 	var users []User
 
 	if err := DB.Where("name = ?", user1.Name).Or("name = ?", user3.Name).Find(&users).Count(&count).Error; err != nil {
-		t.Errorf(fmt.Sprintf("Count should work, but got err %v", err))
+		t.Errorf("%s", fmt.Sprintf("Count should work, but got err %v", err))
 	}
 
 	if count != int64(len(users)) {
